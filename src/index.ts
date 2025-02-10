@@ -19,8 +19,6 @@ export const createAuthHandler = (credentials: Credentials, _config: Partial<Con
     })
 }
 
-// const data = createAuthHandler({ privateKey: '', publicKey: '', algorithm: 'ES256'}).generateRefreshToken()
-
 export {
     hashRefreshTokenData,
     GeneratorErrors,
@@ -44,10 +42,10 @@ function getFinalTokensConfig(config: Partial<Config>): Config{
 function getDefaultTokensConfig(): Config{
     return ({
         access_token: {
-            expiry: 1
+            expiry: 3600 // 1h
         },
         refresh_token: {
-            expiry: 1
+            expiry: 3600 * 24 * 90 // 90days
         }
     })
 }
