@@ -1,7 +1,7 @@
 # Easy OAuth2
 Implement OAuth2 Authentication into your project easily<br />
 
-This was developed on top of `jsonwebtoken`
+This is developed as a wrapper for `jsonwebtoken`
 
 
 # Install
@@ -17,12 +17,12 @@ utils/auth.ts
 import fs from 'fs'
 import { createAuthHandler, Credentials, Config } from "easy-oauth2";
 
-const credentials: Credentials = {
+const authHandler = createAuthHandler({
     privateKey: fs.readFileSync(PRIVATE_KEY_PATH, 'utf-8'),
     publicKey: fs.readFileSync(PUBLIC_KEY_PATH, 'utf-8'),
     algorithm: KEYS_ALG
-}
-const authHandler = createAuthHandler(credentials, config)
+})
+
 export authHandler
 ```
 
@@ -71,6 +71,7 @@ router.post("/", async (req: Request, res: Response) => {
 
 Package usage with examples
 
+
 ## Creating Auth Handler
 **createAuthHandler(credentials, config)**
 
@@ -116,6 +117,7 @@ const config: Partial<Config> = {
 const authHandler = createAuthHandler(credentials, config)
 ```
 
+
 ## Generating Access Token
 
 **authHandler.generateAccessToken(data)**
@@ -127,13 +129,18 @@ const authHandler = createAuthHandler(credentials, config)
 #### Example
 
 ```
-const userID = UNIQUE_USER_ID
-const token = authHandler.generateAccessToken(userID)
+try{
+    const userID = UNIQUE_USER_ID
+    const token = authHandler.generateAccessToken(userID)
+}catch(err){
+    ...
+}
 ```
 
 #### Errors
 
 *soon...*
+
 
 ## Generating Refresh Token
 
@@ -148,7 +155,11 @@ const token = authHandler.generateAccessToken(userID)
 #### Example
 
 ```
-const { jwt, token, hashedToken } = authHandler.generateRefreshToken()
+try{
+    const { jwt, token, hashedToken } = authHandler.generateRefreshToken()
+}catch(err){
+    ...
+}
 ```
 
 #### Errors
@@ -157,14 +168,15 @@ const { jwt, token, hashedToken } = authHandler.generateRefreshToken()
 
 #### Idea
 
-**Login:**
+**On Login:**
 Store jwt on user device
 Store hashedToken in database
 
-**On Token Refresh**
+**On Token Refresh:**
 Extract token from user jwt
 Hash Token
 Try to find hashed token in database
+
 
 ## Validating Token
 
@@ -179,6 +191,29 @@ Try to find hashed token in database
 ```
 const jwt = YOUR_JSONWEBTOKEN
 const data = authHandler.verifyAndDecodeToken(jwt);
+```
+
+#### Errors
+
+*soon...*
+
+
+## Hashing Refresh Token
+
+**hashRefreshToken(token)**
+
+*Returns hashed token*
+
+`token` is string of plain hex token
+
+>**Note:**
+>You don't need to use this function you can implement it yourself with crypto library but we recommend just so you can be future proof.
+
+#### Example
+
+```
+const token = DECODED_REFRESH_JWT
+const hashedToken = hashRefreshToken(token);
 ```
 
 #### Errors

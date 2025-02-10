@@ -1,9 +1,10 @@
 {
   "name": "easy-oauth2",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy OAuth 2.0 Implementation with access and refresh tokens",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "keywords": ["easy oauth2", "simple oauth2"],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
