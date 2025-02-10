@@ -1,4 +1,4 @@
-import { Credentials } from "@/types/credentials";
+import { Credentials } from "../types/credentials";
 import { createAuthHandler, hashRefreshTokenData } from "..";
 
 describe('Generating Refresh Token', () => {
