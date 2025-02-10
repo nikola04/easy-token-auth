@@ -1,6 +1,6 @@
 {
   "name": "easy-oauth2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Easy OAuth 2.0 Implementation with access and refresh tokens",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,7 +22,6 @@
   "dependencies": {
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.8",
-    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2"
   },
   "_moduleAliases": {
