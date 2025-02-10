@@ -1,8 +1,9 @@
 import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify } from "jsonwebtoken";
 import { Credentials } from "types/credentials";
 
-export enum ValidationErrors {
+export enum ValidatorErrors {
     InvalidToken = 'JWTInvalidToken',
+    InvalidTokenStructure = "InvalidTokenStructure",
     TokenExpired = 'JWTTokenExpired',
     TokenNotActive = 'JWTTokenNotActive',
     InvalidAlgorithm = 'JWTInvalidAlgorithm',
@@ -13,20 +14,24 @@ export const createTokenValidatorDecoder = (credentials: Credentials) => {
     return (token: string) => {
         try{
             const decoded = verify(token, credentials.publicKey)
-            return decoded;
+            if (decoded && typeof decoded === 'object' && 'data' in decoded) {
+                const data = decoded.data;
+                return data;
+            } 
+            throw ValidatorErrors.InvalidTokenStructure
         }catch(err){
             if (err instanceof JsonWebTokenError) {
                 if (err.message.includes('invalid algorithm')) {
-                    throw ValidationErrors.InvalidAlgorithm;
+                    throw ValidatorErrors.InvalidAlgorithm;
                 } else if (err.message.includes('secret or public key must be provided'))
-                    throw ValidationErrors.InvalidSecretOrKey;
-                throw ValidationErrors.InvalidToken; // Generic error - invalid token
+                    throw ValidatorErrors.InvalidSecretOrKey;
+                throw ValidatorErrors.InvalidToken; // Generic error - invalid token
             }
 
             if (err instanceof TokenExpiredError)
-                throw ValidationErrors.TokenExpired;
+                throw ValidatorErrors.TokenExpired;
             if (err instanceof NotBeforeError)
-                throw ValidationErrors.TokenNotActive;
+                throw ValidatorErrors.TokenNotActive;
 
             return null;
         }

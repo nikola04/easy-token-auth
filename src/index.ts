@@ -1,7 +1,7 @@
 import { Credentials } from "types/credentials"
 import { Config } from "types/tokens"
-import { createTokenGenerators } from "./generation/generate";
-import { createTokenValidatorDecoder } from "./validation/validate";
+import { createTokenGenerators, GeneratorErrors, hashRefreshTokenData } from "./generation/generate";
+import { createTokenValidatorDecoder, ValidatorErrors } from "./validation/validate";
 
 /**
  * Create auth handler and register asymetric keys
@@ -17,6 +17,14 @@ export const createAuthHandler = (credentials: Credentials, _config: Partial<Con
         generateRefreshToken: generateToken.refresh,
         verifyAndDecodeToken: verifyDecodeToken
     })
+}
+
+// const data = createAuthHandler({ privateKey: '', publicKey: '', algorithm: 'ES256'}).generateRefreshToken()
+
+export {
+    hashRefreshTokenData,
+    GeneratorErrors,
+    ValidatorErrors
 }
 
 function getFinalTokensConfig(config: Partial<Config>): Config{

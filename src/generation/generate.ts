@@ -1,16 +1,18 @@
 import { Credentials } from "types/credentials";
 import { JsonWebTokenError, sign, TokenExpiredError } from "jsonwebtoken"
 import { Config, TokenConfig } from "types/tokens";
+import crypto from "crypto"
 
 export enum GeneratorErrors{
     TokenExpiredError = 'JWTExpiredToken',
     InvalidAlgorithm = 'JWTInvalidAlgorithm',
-    InvalidSecretOrKey = 'JWTInvalidSecretOrKey'
+    InvalidSecretOrKey = 'JWTInvalidSecretOrKey',
+    SignError = 'JWTSignError'
 }
 
-const generateJWT = (credentials: Credentials, config: TokenConfig) => {
+const createJWTGenerator = (credentials: Credentials, config: TokenConfig) => {
     const expiry = config.expiry;
-    return (data: any) => {
+    return (data: any): string => {
         try{
             const token = sign({ data }, credentials.privateKey, { algorithm: credentials.algorithm, expiresIn: expiry })
             return token;
@@ -24,13 +26,31 @@ const generateJWT = (credentials: Credentials, config: TokenConfig) => {
             }
             if(err instanceof TokenExpiredError) 
                 throw GeneratorErrors.TokenExpiredError
+            console.error(err)
+            throw GeneratorErrors.SignError
         }
     }
 }
 
+function generateRefreshToken(credentials: Credentials, config: TokenConfig) {
+	const { token, hashedToken } = generateRefreshTokenData();
+    const generator = createJWTGenerator(credentials, config);
+    return () => ({ jwt: generator(token), token, hashedToken })
+}
+
+function generateRefreshTokenData() {
+	const token = crypto.randomBytes(64).toString('hex');
+    const hashedToken = hashRefreshTokenData(token)
+	return ({ token, hashedToken });
+}
+
+export function hashRefreshTokenData(token: string){
+    return crypto.createHash('sha256').update(token).digest('hex')
+}
+
 export const createTokenGenerators = (credentials: Credentials, config: Config) => {
     return ({
-        access: generateJWT(credentials, config.access_token),
-        refresh: generateJWT(credentials, config.refresh_token)
+        access: createJWTGenerator(credentials, config.access_token),
+        refresh: generateRefreshToken(credentials, config.refresh_token)
     })
 }
