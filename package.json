@@ -1,10 +1,12 @@
 {
-  "name": "oauth2-authorization",
+  "name": "easy-oauth2",
   "version": "1.0.0",
   "description": "Easy OAuth 2.0 Implementation with access and refresh tokens",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "jest --watchAll --verbose src/"
   },
   "repository": {
@@ -32,5 +34,8 @@
     "module-alias": "^2.2.3",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

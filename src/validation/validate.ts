@@ -1,5 +1,5 @@
 import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify } from "jsonwebtoken";
-import { Credentials } from "types/credentials";
+import { Credentials } from "@/types/credentials";
 
 export enum ValidatorErrors {
     InvalidToken = 'JWTInvalidToken',
@@ -17,7 +17,7 @@ export const createTokenValidatorDecoder = (credentials: Credentials) => {
             if (decoded && typeof decoded === 'object' && 'data' in decoded) {
                 const data = decoded.data;
                 return data;
-            } 
+            }
             throw ValidatorErrors.InvalidTokenStructure
         }catch(err){
             if (err instanceof JsonWebTokenError) {

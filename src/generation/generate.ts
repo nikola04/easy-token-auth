@@ -1,6 +1,6 @@
-import { Credentials } from "types/credentials";
+import { Credentials } from "@/types/credentials";
 import { JsonWebTokenError, sign, TokenExpiredError } from "jsonwebtoken"
-import { Config, TokenConfig } from "types/tokens";
+import { Config, TokenConfig } from "@/types/tokens";
 import crypto from "crypto"
 
 export enum GeneratorErrors{
@@ -26,7 +26,7 @@ const createJWTGenerator = (credentials: Credentials, config: TokenConfig) => {
             }
             if(err instanceof TokenExpiredError) 
                 throw GeneratorErrors.TokenExpiredError
-            console.error(err)
+            // console.error(err)
             throw GeneratorErrors.SignError
         }
     }

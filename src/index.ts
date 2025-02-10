@@ -1,5 +1,5 @@
-import { Credentials } from "types/credentials"
-import { Config } from "types/tokens"
+import { Credentials } from "./types/credentials"
+import { Config } from "./types/tokens"
 import { createTokenGenerators, GeneratorErrors, hashRefreshTokenData } from "./generation/generate";
 import { createTokenValidatorDecoder, ValidatorErrors } from "./validation/validate";
 
@@ -49,3 +49,6 @@ function getDefaultTokensConfig(): Config{
         }
     })
 }
+
+export { Config } from './types/tokens'
+export { Credentials } from './types/credentials'
