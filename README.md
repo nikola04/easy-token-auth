@@ -1,4 +1,4 @@
-# Easy OAuth2
+# Easy Token Auth
 Implement Token Authentication into your project easily<br />
 
 This is developed as a wrapper for `jsonwebtoken`
