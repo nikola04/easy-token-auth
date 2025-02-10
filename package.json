@@ -1,10 +1,10 @@
 {
-  "name": "easy-oauth2",
-  "version": "1.0.2",
-  "description": "Easy OAuth 2.0 Implementation with access and refresh tokens",
+  "name": "easy-token-auth",
+  "version": "1.0.0",
+  "description": "Easy Token Authentication 2.0 Implementation with access and refresh tokens",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "keywords": ["easy oauth2", "simple oauth2"],
+  "keywords": ["easy token auth", "simple token auth"],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nikola04/easy-oauth2.git"
+    "url": "git+https://github.com/nikola04/easy-token-auth.git"
   },
   "author": "Nikola Nedeljkovic",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nikola04/easy-oauth2/issues"
+    "url": "https://github.com/nikola04/easy-token-auth/issues"
   },
-  "homepage": "https://github.com/nikola04/easy-oauth2#readme",
+  "homepage": "https://github.com/nikola04/easy-token-auth#readme",
   "dependencies": {
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.8",
