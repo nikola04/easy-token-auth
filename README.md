@@ -1,5 +1,5 @@
 # Easy OAuth2
-Implement OAuth2 Authentication into your project easily<br />
+Implement Token Authentication into your project easily<br />
 
 This is developed as a wrapper for `jsonwebtoken`
 
@@ -7,7 +7,7 @@ This is developed as a wrapper for `jsonwebtoken`
 # Install
 npm:
 ```
-$ npm install easy-oauth2
+$ npm i easy-token-auth
 ```
 
 # Usage Example
@@ -15,7 +15,7 @@ $ npm install easy-oauth2
 utils/auth.ts
 ```
 import fs from 'fs'
-import { createAuthHandler, Credentials, Config } from "easy-oauth2";
+import { createAuthHandler, Credentials, Config } from "easy-token-auth";
 
 const authHandler = createAuthHandler({
     privateKey: fs.readFileSync(PRIVATE_KEY_PATH, 'utf-8'),
@@ -47,7 +47,7 @@ router.post("/", async (req: Request, res: Response) => {
 /api/refresh.ts
 ```
 import { authHandler } from 'utils/auth';
-import { hashRefreshToken } from 'easy-oauth2';
+import { hashRefreshToken } from 'easy-token-auth';
 
 router.post("/", async (req: Request, res: Response) => {
     const refreshJWT = USER_REFRESH_JWT
