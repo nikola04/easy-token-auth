@@ -79,7 +79,7 @@ Package usage with examples
 
 *Returns functions for generating and verifying tokens*
 
-`config` is ojbect of `Config` type and can be partial.
+- `config` is ojbect of `Config` type and can be partial.
 
 #### Config
 ```
@@ -249,15 +249,15 @@ try{
 
 *Returns generated credentials*
 
-- `algorithm` is string representing algorithm which will be used with jwt
-**RSA** and **ECDSA** are only supported now.
-    - `RS256`, `RS384`, `RS512`
-    - `ES256`, `ES384`, `ES512`
-<br/>
+- `algorithm` is string representing algorithm which will be used with jwt. 
+    - **RSA** `RS256`, `RS384`, `RS512`
+    - **ECDSA** `ES256`, `ES384`, `ES512`
+
 - `keySize` can be *low*, *medium* or *high* for 
     - `low`: For general use with moderate security. RSA modulus is 2048 bits, ECDSA curve is prime256v1.
     - `medium`: For more secure key generation with a balance of performance. RSA modulus is 3072 bits, ECDSA curve is secp384r1.
     - `high`: For highly secure key generation, at the cost of performance. RSA modulus is 4096 bits, ECDSA curve is secp521r1.
+
 >**Important:** Key size must match algorithm for ECDSA, otherwise an error will be thrown. for e.g. 'ES256' algorithm must have 'low' key size.
 
 
