@@ -172,7 +172,7 @@ authHandler.setCredentials(credentials);
 
 *Returns generated jwt*
 
-`data` is required and can be any type. *userID* or other unique user data
+- `data` is required and can be any type. *userID* or other unique user data
 
 #### Examples
 
@@ -194,11 +194,11 @@ try{
 
 **authHandler.generateRefreshToken()**
 
-*Returns object of **jwt**, **token** and **hashedToken**
+*Returns object of **jwt**, **token** and **hashedToken***
 
-`jwt` is generated jwt
-`token` is random generaded 64 string that is included in jwt
-`hashedToken` is sha256 hashed **token** and it is not included in jwt
+- `jwt` is generated jwt
+- `token` is random generated 64 string that is included in jwt
+- `hashedToken` is sha256 hashed **token** and it is not included in jwt
 
 #### Example
 
@@ -226,7 +226,7 @@ Storing hashed value in database instead of plain one is a bit safer.
 
 *Returns decoded data*
 
-`jwt` is string of jsonwebtoken
+- `jwt` is string of jsonwebtoken
 
 #### Example
 
@@ -249,15 +249,15 @@ try{
 
 *Returns generated credentials*
 
-`algorithm` is string representing algorithm which will be used with jwt
+- `algorithm` is string representing algorithm which will be used with jwt
 **RSA** and **ECDSA** are only supported now.
-- `RS256`, `RS384`, `RS512`
-- `ES256`, `ES384`, `ES512`
-
-`keySize` can be *low*, *medium* or *high* for 
-- `low`: For general use with moderate security. RSA modulus is 2048 bits, ECDSA curve is prime256v1.
-- `medium`: For more secure key generation with a balance of performance. RSA modulus is 3072 bits, ECDSA curve is secp384r1.
-- `high`: For highly secure key generation, at the cost of performance. RSA modulus is 4096 bits, ECDSA curve is secp521r1.
+    - `RS256`, `RS384`, `RS512`
+    - `ES256`, `ES384`, `ES512`
+<br/>
+- `keySize` can be *low*, *medium* or *high* for 
+    - `low`: For general use with moderate security. RSA modulus is 2048 bits, ECDSA curve is prime256v1.
+    - `medium`: For more secure key generation with a balance of performance. RSA modulus is 3072 bits, ECDSA curve is secp384r1.
+    - `high`: For highly secure key generation, at the cost of performance. RSA modulus is 4096 bits, ECDSA curve is secp521r1.
 >**Important:** Key size must match algorithm for ECDSA, otherwise an error will be thrown. for e.g. 'ES256' algorithm must have 'low' key size.
 
 
@@ -301,7 +301,7 @@ const credentials = generateCredentials('ES512');
 
 *Returns hashed token*
 
-`token` is string of plain hexadecimal token
+- `token` is string of plain hexadecimal token
 
 #### Example
 
