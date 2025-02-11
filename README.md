@@ -309,3 +309,7 @@ const credentials = generateCredentials('ES512');
 const token = DECODED_REFRESH_JWT
 const hashedToken = hashRefreshToken(token);
 ```
+
+## License
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
