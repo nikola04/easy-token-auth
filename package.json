@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "test": "jest --watchAll --verbose src/"
+    "test": "jest --verbose src/",
+    "test:watch": "jest --watchAll --verbose src/"
   },
   "repository": {
     "type": "git",
