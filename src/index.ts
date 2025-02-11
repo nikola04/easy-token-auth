@@ -1,28 +1,46 @@
 import { Credentials } from "./types/credentials"
 import { Config } from "./types/tokens"
-import { createTokenGenerators, GeneratorErrors, hashRefreshTokenData } from "./generation/generate";
+import { createTokenGenerators, GeneratorErrors } from "./generation/tokens";
 import { createTokenValidatorDecoder, ValidatorErrors } from "./validation/validate";
+import { addCredentials } from "./utils/credentials";
 
 /**
- * Create auth handler and register asymetric keys
- * @param credentials generated private and public key
- * @returns Functions for token validation and generation, express middlewares
+ * Create an authentication handler and register asymmetric keys for token operations.
+ * 
+ * This function generates and registers the necessary key pairs for signing and verifying 
+ * JWT tokens using the provided asymmetric keys (public and private). It returns middleware 
+ * functions for token validation and generation, which can be used in Express.js applications.
+ * 
+ * @param credentials - The credentials containing the public and private keys used 
+ * for signing and verifying JWT tokens.
+ * @param _config - Optional configuration object for token settings (e.g., expiration).
+ * If not provided, default configurations are used.
+ * - `access_token`: Configuration for access tokens.
+ * - - `expiry`: The expiration time for access tokens in seconds (default: 3600).
+ * - `refresh_token`: Configuration for refresh tokens.
+ * - - `expiry`: The expiration time for refresh tokens in seconds (default: 7776000).
+ * - `credentials_limit`: The maximum number of rolled credentials to store in memory (default: 10).
+ * 
+ * @returns An object with the following methods:
+ *   - `generateAccessToken`: A function to generate access tokens.
+ *   - `generateRefreshToken`: A function to generate refresh tokens.
+ *   - `verifyAndDecodeToken`: A function to verify and decode JWT tokens.
  */
-export const createAuthHandler = (credentials: Credentials, _config: Partial<Config> = {}) => {
-    const config: Config = getFinalTokensConfig(_config);
-    const generateToken = createTokenGenerators(credentials, config);
-    const verifyDecodeToken = createTokenValidatorDecoder(credentials);
+export const createAuthHandler = (config: Partial<Config> = {}) => {
+    const _config: Config = getFinalTokensConfig(config);
+    const credentialsMap: Map<string, Credentials> = new Map();
+    const credentialsList: string[] = [];
+    const generateToken = createTokenGenerators(_config, () => {
+        const lastId = credentialsList[credentialsList.length - 1];
+        return credentialsMap.get(lastId) || null;
+    });
+    const verifyDecodeToken = createTokenValidatorDecoder((id: string) => credentialsMap.get(id) || null);
     return ({
+        setCredentials: (credentials: Credentials) => addCredentials(credentialsMap, credentialsList, credentials, _config.credentials_limit),
         generateAccessToken: generateToken.access,
         generateRefreshToken: generateToken.refresh,
-        verifyAndDecodeToken: verifyDecodeToken
+        verifyAndDecodeToken: verifyDecodeToken,
     })
-}
-
-export {
-    hashRefreshTokenData,
-    GeneratorErrors,
-    ValidatorErrors
 }
 
 function getFinalTokensConfig(config: Partial<Config>): Config{
@@ -35,7 +53,9 @@ function getFinalTokensConfig(config: Partial<Config>): Config{
         refresh_token: {
             ...defaultConfig.refresh_token,
             ...config.refresh_token
-        }
+        },
+        // if user config is less than 1 or not provided, use default
+        credentials_limit: (config?.credentials_limit && config.credentials_limit > 0) ? config.credentials_limit : defaultConfig.credentials_limit
     })
 }
 
@@ -46,9 +66,17 @@ function getDefaultTokensConfig(): Config{
         },
         refresh_token: {
             expiry: 3600 * 24 * 90 // 90days
-        }
+        },
+        credentials_limit: 10
     })
 }
 
+export { generateCredentials } from './generation/keys'
+export { hashRefreshTokenData } from './generation/tokens'
 export { Config } from './types/tokens'
 export { Credentials } from './types/credentials'
+
+export {
+    GeneratorErrors,
+    ValidatorErrors
+}

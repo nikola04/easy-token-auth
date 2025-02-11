@@ -1,4 +1,4 @@
-import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify } from "jsonwebtoken";
+import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify, decode } from "jsonwebtoken";
 import { Credentials } from "@/types/credentials";
 
 export enum ValidatorErrors {
@@ -10,8 +10,11 @@ export enum ValidatorErrors {
     InvalidSecretOrKey = 'JWTInvalidSecretOrKey'
 }
 
-export const createTokenValidatorDecoder = (credentials: Credentials) => {
+export const createTokenValidatorDecoder = (getCredentialsById: (id: string) => Credentials|null) => {
     return (token: string) => {
+        const credentialsId = getTokenCredentialsId(token);
+        const credentials = getCredentialsById(credentialsId);
+        if(!credentials) throw ValidatorErrors.TokenExpired;
         try{
             const decoded = verify(token, credentials.publicKey)
             if (decoded && typeof decoded === 'object' && 'data' in decoded) {
@@ -25,15 +28,25 @@ export const createTokenValidatorDecoder = (credentials: Credentials) => {
                     throw ValidatorErrors.InvalidAlgorithm;
                 } else if (err.message.includes('secret or public key must be provided'))
                     throw ValidatorErrors.InvalidSecretOrKey;
+                if (err instanceof TokenExpiredError)
+                    throw ValidatorErrors.TokenExpired;
+                if (err instanceof NotBeforeError)
+                    throw ValidatorErrors.TokenNotActive;
                 throw ValidatorErrors.InvalidToken; // Generic error - invalid token
             }
-
-            if (err instanceof TokenExpiredError)
-                throw ValidatorErrors.TokenExpired;
-            if (err instanceof NotBeforeError)
-                throw ValidatorErrors.TokenNotActive;
-
-            return null;
+            throw ValidatorErrors.InvalidToken;
         }
     }
+}
+
+function getTokenCredentialsId(token: string){
+    const decoded = decode(token, { complete: true });
+    if (!decoded || typeof decoded !== 'object') {
+        throw ValidatorErrors.InvalidTokenStructure;
+    }
+    const payload = decoded.payload as { credentials_id?: string };
+    const credentialsId = payload.credentials_id;
+    if (!credentialsId)
+        throw ValidatorErrors.InvalidTokenStructure;
+    return credentialsId;
 }

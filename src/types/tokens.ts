@@ -3,5 +3,6 @@ export type TokenConfig = {
 }
 export type Config = {
     access_token: TokenConfig,
-    refresh_token: TokenConfig
+    refresh_token: TokenConfig,
+    credentials_limit: number
 }
