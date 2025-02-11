@@ -4,7 +4,10 @@
   "description": "Easy Token Authentication 2.0 Implementation with access and refresh tokens",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "keywords": ["easy token auth", "simple token auth"],
+  "keywords": [
+    "easy token auth",
+    "simple token auth"
+  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
@@ -16,14 +19,12 @@
     "url": "git+https://github.com/nikola04/easy-token-auth.git"
   },
   "author": "Nikola Nedeljkovic",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/nikola04/easy-token-auth/issues"
   },
   "homepage": "https://github.com/nikola04/easy-token-auth#readme",
   "dependencies": {
-    "@types/express": "^5.0.0",
-    "@types/jsonwebtoken": "^9.0.8",
     "jsonwebtoken": "^9.0.2"
   },
   "_moduleAliases": {
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.8",
     "jest": "^29.7.0",
     "module-alias": "^2.2.3",
     "ts-jest": "^29.2.5",
