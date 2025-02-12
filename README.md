@@ -313,3 +313,6 @@ const hashedToken = hashRefreshToken(token);
 # License
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
+This project uses `jsonwebtoken` which is licensed under the MIT License. See the [jsonwebtoken repository](https://github.com/auth0/node-jsonwebtoken) for more details.
+
+
