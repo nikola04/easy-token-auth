@@ -52,7 +52,8 @@ export const createAuthHandler = (config: Partial<Config> = {}) => {
         setCredentials: (credentials: Credentials) => addCredentials(credentialsMap, credentialsList, credentials, _config.credentials_limit),
         generateAccessToken: generateToken.access,
         generateRefreshToken: generateToken.refresh,
-        verifyAndDecodeToken: verifyDecodeToken,
+        verifyAndDecodeToken: verifyDecodeToken.validate,
+        decodeToken: verifyDecodeToken.decode
     })
 }
 

@@ -11,6 +11,26 @@ export enum ValidatorErrors {
 }
 
 export const createTokenValidatorDecoder = (getCredentialsById: (id: string) => Credentials|null) => {
+    return {
+        validate: createTokenValidator(getCredentialsById),
+        decode: createTokenDecoder()
+    }
+}
+
+const createTokenDecoder = () => {
+    return (token: string) => {
+        const decoded = decode(token, { complete: true });
+        if (!decoded || typeof decoded !== 'object') {
+            throw ValidatorErrors.InvalidTokenStructure;
+        }
+        const payload = decoded.payload as { credentials_id?: string, data?: any };
+        if (!payload.credentials_id || !payload.data)
+            throw ValidatorErrors.InvalidTokenStructure;
+        return payload.data;
+    }
+}
+
+const createTokenValidator = (getCredentialsById: (id: string) => Credentials|null) => {
     return (token: string) => {
         const credentialsId = getTokenCredentialsId(token);
         const credentials = getCredentialsById(credentialsId);
