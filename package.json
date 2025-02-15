@@ -1,7 +1,7 @@
 {
   "name": "easy-token-auth",
-  "version": "1.2.0",
-  "description": "Easy Token Authentication 2.0 Implementation with access and refresh tokens",
+  "version": "1.2.1",
+  "description": "Easy Token Authentication Implementation with access and refresh tokens",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "keywords": [

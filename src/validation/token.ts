@@ -1,5 +1,6 @@
 import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify, decode } from "jsonwebtoken";
 import { Credentials } from "@/types/credentials";
+import { isAllowedAlgorithm } from "./algorithm";
 
 export enum ValidatorErrors {
     InvalidToken = 'JWTInvalidToken',
@@ -36,7 +37,9 @@ const createTokenValidator = (getCredentialsById: (id: string) => Credentials|nu
         const credentials = getCredentialsById(credentialsId);
         if(!credentials) throw ValidatorErrors.TokenExpired;
         try{
-            const decoded = verify(token, credentials.publicKey)
+            const algorithm = credentials.algorithm;
+            if(!isAllowedAlgorithm(algorithm)) throw ValidatorErrors.InvalidAlgorithm
+            const decoded = verify(token, credentials.publicKey, { algorithms: [algorithm] })
             if (decoded && typeof decoded === 'object' && 'data' in decoded) {
                 const data = decoded.data;
                 return data;

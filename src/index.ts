@@ -14,7 +14,7 @@
 import { Credentials } from "./types/credentials"
 import { Config } from "./types/tokens"
 import { createTokenGenerators, GeneratorErrors } from "./generation/tokens";
-import { createTokenValidatorDecoder, ValidatorErrors } from "./validation/validate";
+import { createTokenValidatorDecoder, ValidatorErrors } from "./validation/token";
 import { addCredentials } from "./utils/credentials";
 
 /**
