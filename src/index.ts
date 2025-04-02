@@ -50,8 +50,10 @@ export const createAuthHandler = (config: Partial<Config> = {}) => {
     const verifyDecodeToken = createTokenValidatorDecoder((id: string) => credentialsMap.get(id) || null);
     return ({
         setCredentials: (credentials: Credentials) => addCredentials(credentialsMap, credentialsList, credentials, _config.credentials_limit),
+        generateToken: generateToken.default,
         generateAccessToken: generateToken.access,
         generateRefreshToken: generateToken.refresh,
+
         verifyAndDecodeToken: verifyDecodeToken.validate,
         decodeToken: verifyDecodeToken.decode
     })
@@ -60,6 +62,10 @@ export const createAuthHandler = (config: Partial<Config> = {}) => {
 function getFinalTokensConfig(config: Partial<Config>): Config{
     const defaultConfig = getDefaultTokensConfig()
     return ({
+        default: {
+            ...defaultConfig.default,
+            ...config.default
+        },
         access_token: {
             ...defaultConfig.access_token,
             ...config.access_token
@@ -75,6 +81,9 @@ function getFinalTokensConfig(config: Partial<Config>): Config{
 
 function getDefaultTokensConfig(): Config{
     return ({
+        default: {
+            expiry: 600 // 10 minutes
+        },
         access_token: {
             expiry: 3600 // 1h
         },

@@ -52,6 +52,7 @@ export function hashRefreshTokenData(token: string){
 
 export const createTokenGenerators = (config: Config, lastCredential: () => Credentials|null) => {
     return ({
+        default: createJWTGenerator(config.default, lastCredential),
         access: createJWTGenerator(config.access_token, lastCredential),
         refresh: generateRefreshToken(config.refresh_token, lastCredential)
     })
